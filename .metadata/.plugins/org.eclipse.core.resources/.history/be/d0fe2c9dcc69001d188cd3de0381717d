@@ -1,0 +1,9 @@
+package com.training.mvc.dao;
+
+import com.training.mvc.entities.Content;
+
+public interface ContentDAO {
+	
+	void createContent(Content content);
+
+}

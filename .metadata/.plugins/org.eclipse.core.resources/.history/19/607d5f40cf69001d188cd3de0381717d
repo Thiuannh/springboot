@@ -1,0 +1,84 @@
+package com.training.mvc.controller;
+
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
+
+import com.training.mvc.DTO.UserDTO;
+import com.training.mvc.entities.User;
+import com.training.mvc.service.EmployeeService;
+
+/**
+ * Handles requests for the application home page.
+ */
+@Controller
+public class UserController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+	
+	@Autowired
+	private EmployeeService employeeService;
+	
+	
+	/**
+	 * Simply selects the home view to render by returning its name.
+	 */
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
+	public String home(Locale locale, Model model) {
+		model.addAttribute("userDTO", new UserDTO()); 
+		return "register";
+	}
+	
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	public RedirectView register(@Valid @ModelAttribute("userDTO") UserDTO userDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+		if(bindingResult.hasErrors()) {
+			
+			return new RedirectView("register");
+			
+		}
+		else {
+			User user = new User(userDTO.getUserName(), userDTO.getEmail(), userDTO.getPassword());
+			employeeService.createEmployee(user);
+			
+			String userName = user.getUserName();
+			String url = "userProfile/" + userName;
+			return new RedirectView(url);
+			
+			
+		}
+		
+		
+
+	}
+	
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String login(Model model) {
+		model.addAttribute("user", new User()); 
+		return "login";
+	}
+	
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public RedirectView doLogin(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
+		employeeService.login(user);
+		ModelAndView modelAndView = new ModelAndView("home");
+		return modelAndView;
+		
+		
+	}
+	
+}

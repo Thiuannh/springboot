@@ -1,0 +1,14 @@
+package com.training.mvc.entities;
+
+public class UserDetails {
+	
+	private Integer id;
+	
+	private String phone;
+	
+	private String address;
+	
+	private Integer age;
+	
+
+}

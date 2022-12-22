@@ -1,0 +1,103 @@
+package com.training.mvc.controller;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.hibernate.usertype.CompositeUserType;
+import org.hibernate.usertype.EnhancedUserType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+
+import com.training.mvc.dao.ContentDAO;
+import com.training.mvc.dao.UserDAO;
+import com.training.mvc.dao.UserDetailsDAO;
+import com.training.mvc.entities.Content;
+import com.training.mvc.entities.User;
+import com.training.mvc.entities.UserDetails;
+
+import javassist.expr.NewArray;
+
+
+@SessionAttributes("userSession")
+@Controller
+public class homeController {
+	
+	
+	@Autowired
+	UserDAO userDAO;
+	
+	@Autowired
+	UserDetailsDAO userDetailsDAO;
+	
+	@Autowired
+	ContentDAO contentDAO;
+	
+	
+
+	
+	
+	@RequestMapping(value = "/userProfile", method = RequestMethod.GET)
+	public String home(Model model,@RequestParam("userName") String username) {
+		
+
+		
+		model.addAttribute("userDetails", new UserDetails());
+		model.addAttribute("userName", username);
+		return "home";
+		
+	}
+	@RequestMapping(value = "/userProfile", method = RequestMethod.POST)
+	public String dohome(@ModelAttribute("userDetails") UserDetails userDetails, @ModelAttribute("userName") String username){
+		System.out.println(username);
+		User user = userDAO.findbyUserName(username);
+		
+		userDetails.setUser(user);
+		userDetailsDAO.createUserDetail(userDetails);
+		
+		return "home";
+		
+	
+	}
+	
+	@RequestMapping(value = "/home/view-conten", method = RequestMethod.GET)
+	public String viewConten(Model model) {
+		List<Content> contents = contentDAO.getAll();
+		
+		model.addAttribute("Contents", contents);
+		return "view-conten";
+		
+	}
+	
+
+	@RequestMapping(value = "/home/form-conten", method = RequestMethod.GET)
+	public String formConten(Model model) {
+		
+		model.addAttribute("Content", new Content());
+		return "form-conten";
+		
+	}
+	
+	@RequestMapping(value = "/home/form-conten", method = RequestMethod.POST)
+	public String doFormConten(@ModelAttribute("Content") Content content, @ModelAttribute("userSession") User use) {
+		
+		content.setDateTime(LocalDateTime.now());
+		content.setUser(use);
+		contentDAO.createContent(content);
+		return "view-conten";
+		
+	}
+	
+	
+	
+	
+	
+
+}

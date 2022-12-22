@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+
+
+	<bean id = "employee" class="com.springdemo.bean.Employee">				
+		<constructor-arg index="0" name="email" value="123"></constructor-arg>
+		<constructor-arg index="1" ref="address"></constructor-arg>	
+		<constructor-arg index="2" ref="address2"></constructor-arg>		
+	</bean>	
+
+	<bean id="address" class="com.springdemo.bean.Address">
+		<property name="addr1" value="17 Duy Tan"/>
+		<property name="addr2" value="Fvile 2 Thach That"/>
+	</bean>
+	
+	<bean id="address2" class="com.springdemo.bean.Address">
+		<property name="addr1" value="Hai Ba Trung"/>
+		<property name="addr2" value="Truong Dinh Giap Bat"/>
+	</bean>
+	
+	<bean id="employeeDao" class="com.springdemo.dao.impl.EmployeeDaoImpl">
+	
+	</bean>
+	
+	<bean id="employeeService" class="com.springdemo.service.impl.EmployeeServiceImpl">
+		<constructor-arg ref="employeeDao"></constructor-arg>	
+	</bean>
+	
+</beans>

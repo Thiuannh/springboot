@@ -1,0 +1,80 @@
+package com.training.mvc.controller;
+
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.training.mvc.DTO.UserDTO;
+import com.training.mvc.entities.User;
+import com.training.mvc.service.EmployeeService;
+
+/**
+ * Handles requests for the application home page.
+ */
+@Controller
+public class HomeController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	
+	@Autowired
+	private EmployeeService employeeService;
+	
+	
+	/**
+	 * Simply selects the home view to render by returning its name.
+	 */
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String home(Locale locale, Model model) {
+		model.addAttribute("userDTO", new UserDTO()); 
+		return "register";
+	}
+	
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	public ModelAndView register(@Valid @ModelAttribute("userDTO") UserDTO userDTO, BindingResult bindingResult) {
+		if(bindingResult.hasErrors()) {
+			ModelAndView modelAndView = new ModelAndView("register");
+			return modelAndView;
+			
+		}
+		else {
+			User user = new User(userDTO.getUserName(), userDTO.getEmail(), userDTO.getPassword());
+			employeeService.createEmployee(user);
+			ModelAndView modelAndView = new ModelAndView("home");
+			modelAndView.addObject("user", user);
+			return modelAndView;
+		}
+		
+		
+
+	}
+	
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String login(Model model) {
+		model.addAttribute("employee", new User()); 
+		return "login";
+	}
+	
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public ModelAndView doLogin(@ModelAttribute("employee") Employee employee) {
+		employeeService.login(employee);
+		ModelAndView modelAndView = new ModelAndView("home");
+		modelAndView.addObject("employee", employee);
+		return modelAndView;
+		
+		
+	}
+	
+}

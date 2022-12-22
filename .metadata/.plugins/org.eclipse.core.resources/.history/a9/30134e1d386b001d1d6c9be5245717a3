@@ -1,0 +1,5 @@
+package com.training.demo.entities;
+
+public class User {
+
+}

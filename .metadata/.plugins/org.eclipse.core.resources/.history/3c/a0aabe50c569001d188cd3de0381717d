@@ -1,0 +1,11 @@
+package com.training.mvc.entities;
+
+
+
+public class Content {
+	
+	private Integer idInteger;
+	
+	
+
+}

@@ -1,0 +1,45 @@
+package com.training.mvc.dao.impl;
+
+import java.util.Collections;
+import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.training.mvc.dao.UserDAO;
+import com.training.mvc.entities.Employee;
+import com.training.mvc.entities.User;
+
+
+@Repository
+public class UserDAOIplm implements UserDAO{
+	
+	@Autowired
+	private SessionFactory sessionFactory;
+	
+	
+	 public void SaveEmployee(User user) {
+		 Session session = sessionFactory.openSession();
+	     session.save(user);
+	    }
+	 
+	 public Employee findbyUserNameAndPassword(Employee employee) {
+		 try {
+			 Session session = sessionFactory.openSession();
+			 String HQL = "FROM Employee E WHERE E.userName = :userName AND E.password = :password";
+			 Query<Employee> query = session.createQuery(HQL);
+			 query.setParameter("userName", employee.getUserName()).setParameter("password", employee.getPassword());
+			 return  query.getSingleResult();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		 return null;
+		 
+		
+	}
+}

@@ -1,0 +1,26 @@
+
+.form-login { 
+    background-color:aliceblue;
+    border: solid 1px burlywood;
+    
+}
+
+.title {
+    background-color: white;
+}
+
+.content {
+  margin-top: 200px;
+}
+
+.header {
+  background-color: azure;}
+
+
+.sidebar {
+  background-color: azure;
+}
+
+.form-contents:hover, .view-contents:hover {
+  background-color: aquamarine;
+}

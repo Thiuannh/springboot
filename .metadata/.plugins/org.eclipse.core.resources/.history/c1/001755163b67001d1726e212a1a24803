@@ -1,0 +1,86 @@
+package mvc.DAO;
+
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import javax.validation.constraints.Null;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
+import fa.traning.entities.Employee;
+import fa.traning.utils.hibernateUtils;
+
+
+
+public class UserDAO {
+
+    public boolean SaveEmployee(Employee employee) {
+        try(Session session = hibernateUtils.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            session.save(employee);
+            tx.commit();
+            return true;
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    
+    public Employee findbyUserName(String userName) {
+		try(Session session = hibernateUtils.getSessionFactory().openSession()) {
+			String HQL = "FROM Employee e WHERE e.userName = :userName";
+			Query<Employee> query = session.createQuery(HQL);
+			query.setParameter("userName", userName);
+			return query.getSingleResult();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return null;
+	}
+    
+    public Employee findbyEmail(String email) {
+		try(Session session = hibernateUtils.getSessionFactory().openSession()) {
+			String HQL = "FROM Employee e WHERE e.email = :email";
+			Query<Employee> query = session.createQuery(HQL);
+			query.setParameter("email", email);
+			return query.getSingleResult();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return null;
+	}
+    
+    public List<Employee> getAll() {
+    	try(Session session = hibernateUtils.getSessionFactory().openSession();) {
+    		String HQL = "FROM Employee";
+    		return session.createQuery(HQL).getResultList();
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+    	return Collections.EMPTY_LIST;
+		
+	}
+    
+    public Employee findByUserNameAndPassword(String userName, String password) {
+    	try(Session session = hibernateUtils.getSessionFactory().openSession();) {
+			String HQL = "FROM Employee E WHERE E.userName = :userName AND E.password = :password";
+			Query<Employee> query = session.createQuery(HQL);
+			query.setParameter("userName", userName).setParameter("password", password);
+			return query.getSingleResult();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+    	return null;
+    }
+    
+}

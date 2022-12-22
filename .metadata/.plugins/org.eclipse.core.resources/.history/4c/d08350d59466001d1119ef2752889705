@@ -1,0 +1,8 @@
+package com.training.mvc.dao;
+
+import com.training.mvc.entities.Employee;
+
+public interface UserDAO {
+	
+	void SaveEmployee(Employee employee);
+}

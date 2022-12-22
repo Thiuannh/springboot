@@ -1,0 +1,5 @@
+package com.training.mvc.DTO;
+
+public class UserDTO {
+
+}

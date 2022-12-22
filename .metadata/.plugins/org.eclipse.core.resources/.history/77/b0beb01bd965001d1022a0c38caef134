@@ -1,0 +1,37 @@
+<%@include file="./resources/fragment/header.jsp"%>
+
+<div class="row content">
+  <div class="col-md-3">
+  </div>
+  <div class="col-md-6">
+    <div class="form-login">
+      <p class="title px-3 py-2">Register</p>
+      <form class="mx-3 my-3" action="<%=request.getContextPath() + "/register"%>" method = "POST">
+        <div class="form-group">
+          <input type="text" class="form-control" id="Username" placeholder="User name" name="userName">
+          <span class="text-danger error"><%=request.getAttribute("userName") == null ? "" : request.getAttribute("userName")%></span>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" id="Email" placeholder="E-mail" name="email">
+            <span class="text-danger error"><%=request.getAttribute("email") == null ? "" : request.getAttribute("email")%></span>
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" id="Password" placeholder="Password" name="password">
+          <span class="text-danger error"><%=request.getAttribute("password") == null ? "" : request.getAttribute("password")%></span>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" id="RePassword" placeholder="Re Password" name="rePassword">
+            <span class="text-danger error"><%=request.getAttribute("rePassword") == null ? "" : request.getAttribute("rePassword")%></span>
+        </div>
+        <button type="submit" class="btn btn-primary w-100 my-3" id="register" >Register</button>
+        <a href="./login" class="login my-3">Click here to Login</a>
+      </form>        
+    </div>
+  </div>
+  <div class="col-md-3">
+  </div>
+</div>
+
+	
+<%@include file="./resources/fragment/footer.jsp"%>
+
